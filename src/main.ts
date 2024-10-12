@@ -23,7 +23,7 @@ counterDisplay.innerHTML = `${counter} ${unitLabel}`;
 app.append(counterDisplay);
 
 const updateCounterDisplay = () => {
-  counterDisplay.innerHTML = `${counter} ${unitLabel}`;
+  counterDisplay.innerHTML = `${counter.toFixed(2)} ${unitLabel}`; 
 };
 
 button.addEventListener("click", () => {
@@ -31,7 +31,16 @@ button.addEventListener("click", () => {
   updateCounterDisplay();
 });
 
-setInterval(() => {
-  counter++;
-  updateCounterDisplay();
-}, 1000); 
+let lastTime: number = 0;
+
+const animate = (time: number) => {
+  if (lastTime) {
+    const deltaTime = (time - lastTime) / 1000; 
+    counter += deltaTime; 
+    updateCounterDisplay();
+  }
+  lastTime = time;
+  requestAnimationFrame(animate); 
+};
+
+requestAnimationFrame(animate);
