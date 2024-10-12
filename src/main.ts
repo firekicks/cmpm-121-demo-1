@@ -22,7 +22,16 @@ const counterDisplay = document.createElement("div");
 counterDisplay.innerHTML = `${counter} ${unitLabel}`;
 app.append(counterDisplay);
 
+const updateCounterDisplay = () => {
+  counterDisplay.innerHTML = `${counter} ${unitLabel}`;
+};
+
 button.addEventListener("click", () => {
   counter++;
-  counterDisplay.innerHTML = `${counter} ${unitLabel}`;
+  updateCounterDisplay();
 });
+
+setInterval(() => {
+  counter++;
+  updateCounterDisplay();
+}, 1000); 
