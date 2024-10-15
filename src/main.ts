@@ -2,38 +2,45 @@ import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
-const gameName = "Atri's Magnificent Game";
+const gameName = "Garden Clicker";
 document.title = gameName;
 
+// Main header
 const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
-const playButton = document.createElement("button");
-playButton.className = "favorite styled";
-playButton.type = "button";
-playButton.innerHTML = "🎉 Let's Play!";
-app.append(playButton);
+// Flower button (main button)
+const flowerButton = document.createElement("button");
+flowerButton.className = "giant-flower";
+flowerButton.type = "button";
+flowerButton.innerHTML = "🌸 Giant Flower 🌸";
+app.append(flowerButton);
 
-let counter: number = 0;
-const unitLabel: string = "celebrations";
+// Initial state
+let flowerCount: number = 0;
+const unitLabel: string = "flowers";
 let growthRate: number = 0;
-const purchasedItems = { A: 0, B: 0, C: 0 };
-const baseCosts = { A: 10, B: 100, C: 1000 };
-const currentCosts = { A: baseCosts.A, B: baseCosts.B, C: baseCosts.C };
+const purchasedItems = { wateringCans: 0, gardeners: 0, greenhouses: 0 };
+const baseCosts = { wateringCans: 10, gardeners: 100, greenhouses: 1000 };
+const currentCosts = { wateringCans: baseCosts.wateringCans, gardeners: baseCosts.gardeners, greenhouses: baseCosts.greenhouses };
 
+// Counter display (shows flower count)
 const counterDisplay = document.createElement("div");
-counterDisplay.innerHTML = `${counter.toFixed(2)} ${unitLabel}`;
+counterDisplay.innerHTML = `${flowerCount.toFixed(2)} ${unitLabel}`;
 app.append(counterDisplay);
 
+// Growth rate display (automatic flower production rate)
 const growthRateDisplay = document.createElement("div");
 growthRateDisplay.innerHTML = `Growth Rate: ${growthRate.toFixed(1)} ${unitLabel}/sec`;
 app.append(growthRateDisplay);
 
+// Purchase display (shows how many tools are purchased)
 const purchaseDisplay = document.createElement("div");
-purchaseDisplay.innerHTML = `Purchased: A - ${purchasedItems.A}, B - ${purchasedItems.B}, C - ${purchasedItems.C}`;
+purchaseDisplay.innerHTML = `Purchased: Watering Cans - ${purchasedItems.wateringCans}, Gardeners - ${purchasedItems.gardeners}, Greenhouses - ${purchasedItems.greenhouses}`;
 app.append(purchaseDisplay);
 
+// Function to create upgrade buttons with custom labels and functionality
 const createUpgradeButton = (label: string, rate: number, itemKey: keyof typeof purchasedItems) => {
   const button = document.createElement("button");
   button.className = "favorite styled";
@@ -43,11 +50,11 @@ const createUpgradeButton = (label: string, rate: number, itemKey: keyof typeof 
   app.append(button);
 
   button.addEventListener("click", () => {
-    if (counter >= currentCosts[itemKey]) {
-      counter -= currentCosts[itemKey];
+    if (flowerCount >= currentCosts[itemKey]) {
+      flowerCount -= currentCosts[itemKey];
       growthRate += rate;
       purchasedItems[itemKey]++;
-      currentCosts[itemKey] *= 1.15; // Increase cost by a factor of 1.15
+      currentCosts[itemKey] *= 1.15; // Increase cost by 1.15x after each purchase
       updateDisplays();
     }
   });
@@ -55,36 +62,41 @@ const createUpgradeButton = (label: string, rate: number, itemKey: keyof typeof 
   return button;
 };
 
-// Create buttons for A, B, C upgrades
-const upgradeAButton = createUpgradeButton("A", 0.1, "A");
-const upgradeBButton = createUpgradeButton("B", 2.0, "B");
-const upgradeCButton = createUpgradeButton("C", 50.0, "C");
+// Create upgrade buttons for the tools (watering cans, gardeners, and greenhouses)
+const upgradeWateringCanButton = createUpgradeButton("Watering Can", 0.1, "wateringCans");
+const upgradeGardenerButton = createUpgradeButton("Gardener", 2.0, "gardeners");
+const upgradeGreenhouseButton = createUpgradeButton("Greenhouse", 50.0, "greenhouses");
 
+// Function to update the displays dynamically
 const updateDisplays = () => {
-  counterDisplay.innerHTML = `${counter.toFixed(2)} ${unitLabel}`;
+  counterDisplay.innerHTML = `${flowerCount.toFixed(2)} ${unitLabel}`;
   growthRateDisplay.innerHTML = `Growth Rate: ${growthRate.toFixed(1)} ${unitLabel}/sec`;
-  purchaseDisplay.innerHTML = `Purchased: A - ${purchasedItems.A}, B - ${purchasedItems.B}, C - ${purchasedItems.C}`;
+  purchaseDisplay.innerHTML = `Purchased: Watering Cans - ${purchasedItems.wateringCans}, Gardeners - ${purchasedItems.gardeners}, Greenhouses - ${purchasedItems.greenhouses}`;
   
-  upgradeAButton.innerHTML = `Purchase A (Cost: ${currentCosts.A.toFixed(2)}, +0.1 ${unitLabel}/sec)`;
-  upgradeBButton.innerHTML = `Purchase B (Cost: ${currentCosts.B.toFixed(2)}, +2.0 ${unitLabel}/sec)`;
-  upgradeCButton.innerHTML = `Purchase C (Cost: ${currentCosts.C.toFixed(2)}, +50 ${unitLabel}/sec)`;
+  // Update the button labels to show current costs
+  upgradeWateringCanButton.innerHTML = `Purchase Watering Can (Cost: ${currentCosts.wateringCans.toFixed(2)}, +0.1 ${unitLabel}/sec)`;
+  upgradeGardenerButton.innerHTML = `Purchase Gardener (Cost: ${currentCosts.gardeners.toFixed(2)}, +2.0 ${unitLabel}/sec)`;
+  upgradeGreenhouseButton.innerHTML = `Purchase Greenhouse (Cost: ${currentCosts.greenhouses.toFixed(2)}, +50 ${unitLabel}/sec)`;
   
-  upgradeAButton.disabled = counter < currentCosts.A;
-  upgradeBButton.disabled = counter < currentCosts.B;
-  upgradeCButton.disabled = counter < currentCosts.C;
+  // Disable buttons if the player doesn't have enough flowers to purchase
+  upgradeWateringCanButton.disabled = flowerCount < currentCosts.wateringCans;
+  upgradeGardenerButton.disabled = flowerCount < currentCosts.gardeners;
+  upgradeGreenhouseButton.disabled = flowerCount < currentCosts.greenhouses;
 };
 
-playButton.addEventListener("click", () => {
-  counter++;
+// Event listener for clicking the giant flower (main action to gain flowers)
+flowerButton.addEventListener("click", () => {
+  flowerCount++;
   updateDisplays();
 });
 
+// Automatic growth animation (increases flower count based on growth rate)
 let lastTime: number = 0;
 
 const animate = (time: number) => {
   if (lastTime) {
     const deltaTime = (time - lastTime) / 1000;
-    counter += growthRate * deltaTime;
+    flowerCount += growthRate * deltaTime;
     updateDisplays();
   }
   lastTime = time;
