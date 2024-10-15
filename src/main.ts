@@ -3,15 +3,43 @@ import "./style.css";
 // Interface for each item (upgrades)
 interface Item {
   name: string;
-  price: number;  // Alternative term for cost
-  growth: number; // Alternative term for rate
+  price: number;      // Alternative term for cost
+  growth: number;     // Alternative term for rate
+  description: string; // Fun description for each item
 }
 
 // Available items (upgradeable tools)
 const availableItems: Item[] = [
-  { name: "Watering Can", price: 10, growth: 0.1 },
-  { name: "Gardener", price: 100, growth: 2.0 },
-  { name: "Greenhouse", price: 1000, growth: 50.0 }
+  { 
+    name: "Watering Can", 
+    price: 10, 
+    growth: 0.1, 
+    description: "Keeps your plants hydrated, adding a small trickle of flowers." 
+  },
+  { 
+    name: "Gardener", 
+    price: 100, 
+    growth: 2.0, 
+    description: "A skilled gardener who nurtures your plants, producing flowers faster."
+  },
+  { 
+    name: "Greenhouse", 
+    price: 1000, 
+    growth: 50.0, 
+    description: "A large greenhouse that provides the perfect environment for plants to flourish."
+  },
+  {
+    name: "Sprinkler System", 
+    price: 5000, 
+    growth: 150.0, 
+    description: "Automated sprinklers provide consistent hydration, speeding up flower production."
+  },
+  {
+    name: "Botanical Garden", 
+    price: 20000, 
+    growth: 500.0, 
+    description: "An entire garden managed by experts, attracting tons of visitors and growing flowers rapidly."
+  }
 ];
 
 // Initialize the game
@@ -76,6 +104,11 @@ availableItems.forEach(item => {
   button.innerHTML = `Purchase ${item.name} (Cost: ${currentPrices[item.name].toFixed(2)}, +${item.growth.toFixed(1)} ${unitLabel}/sec)`;
   button.disabled = true;
   app.append(button);
+
+  // Add a description below each button
+  const description = document.createElement("p");
+  description.innerHTML = item.description;
+  app.append(description);
 
   upgradeButtons[item.name] = button; // Store the button reference
 
