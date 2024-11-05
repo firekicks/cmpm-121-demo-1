@@ -24,7 +24,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background-image: url('path/to/floral-pattern.jpg'); /* Add your floral background here */
+  background-image: url("path/to/floral-pattern.jpg"); /* Add your floral background here */
   background-size: cover;
   background-attachment: fixed;
   background-blend-mode: multiply;
@@ -35,7 +35,7 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-  font-family: 'Dancing Script', cursive; /* Floral-themed font */
+  font-family: "Dancing Script", cursive; /* Floral-themed font */
   color: var(--primary-color);
   margin-bottom: 0.5em;
 }
@@ -49,7 +49,8 @@ h1 {
 }
 
 /* Counters and Growth Rate Display */
-.counter-display, .growth-rate-display {
+.counter-display,
+.growth-rate-display {
   background-color: rgba(255, 255, 255, 0.9);
   padding: 1em;
   margin: 1em 0;
@@ -73,7 +74,9 @@ button {
   display: flex;
   align-items: center;
   gap: 0.5em;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 
 button:hover {
@@ -98,9 +101,15 @@ button::before {
 }
 
 @keyframes float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 /* Upgrade Section Layout */
